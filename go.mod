@@ -1,6 +1,6 @@
 module perfume-shop
 
-go 1.23.2
+go 1.23
 
 require (
 	github.com/bytedance/sonic v1.13.3 // indirect
