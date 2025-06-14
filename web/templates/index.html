@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин сувениров и духов на разлив</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Основные стили для фона */
+        body.bg-image {
+            background-image: url('/static/stroitel.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Фиксирует фон при прокрутке */
+            min-height: 100vh;
+        }
+
+        /* Стили для секций */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 0;
+            position: relative;
+        }
+
+        /* Удаляем общий оверлей для всех секций */
+        /* .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+        } */
+
+        /* Добавляем оверлей только для слайдеров */
+        #souvenirs::before, 
+        #perfumes::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Затемнение для слайдеров - можно менять прозрачность (0.5) */
+            z-index: 1;
+        }
+
+        /* Стили для слайдера сувениров */
+        .souvenirs-slider {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+            width: 60%;
+            z-index: 2; /* Размещаем поверх оверлея */
+        }
+
+        .souvenirs-slider .carousel-item {
+            height: 100vh;
+            width: 100%;
+        }
+
+        .souvenirs-slider .carousel-item img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            filter: brightness(0.7);
+        }
+
+        /* Стили для контента в слайдере сувениров */
+        .slide-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 100%; /* Ширина контента - можно менять */
+            max-width: 400px; /* Максимальная ширина контента - можно менять */
+        }
+
+        .slide-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .slide-content p {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Стили для слайдера духов */
+        .perfumes-slider {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            width: 60%;
+            z-index: 2; /* Размещаем поверх оверлея */
+        }
+
+        .perfumes-slider .carousel-item {
+            height: 100vh;
+            width: 100%;
+        }
+
+        .perfumes-slider .carousel-item img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            filter: brightness(0.6);
+        }
+
+        /* Стили для контента в слайдере духов */
+        .perfume-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 60%; /* Ширина контента - можно менять */
+            max-width: 800px; /* Максимальная ширина контента - можно менять */
+            background-color: rgba(0,0,0,0.7);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .perfume-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .perfume-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .perfume-content ul li {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .perfume-content ul li:before {
+            content: "•";
+            color: #ffd700;
+            position: absolute;
+            left: 0;
+        }
+
+        .btn-more {
+            background-color: #ffd700;
+            color: #000;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-more:hover {
+            background-color: #ffed4a;
+            transform: scale(1.05);
+        }
+
+        /* Стили для секции контактов */
+        .contacts-section {
+            background-color: #ffffff; /* Чистый белый фон - можно менять цвет */
+            padding: 50px 0;
+            z-index: 2;
+        }
+
+        .contact-info {
+            color: #181b1d;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        .contact-info strong {
+            color: #020202;
+            font-size: 1.3rem;
+        }
+
+        .building-name {
+            color: #27ae60;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .map-container {
+            width: 60%;
+            height: 350px;
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 3px solid #3498db;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .slide-content h2 {
+                font-size: 2rem;
+            }
+
+            .slide-content p {
+                font-size: 1.2rem;
+            }
+
+            .price {
+                font-size: 1.5rem;
+            }
+
+            .perfume-content {
+                width: 90%;
+                padding: 1rem;
+            }
+
+            .perfume-content h2 {
+                font-size: 1.8rem;
+            }
+
+            .perfume-content ul li {
+                font-size: 1rem;
+            }
+
+            .map-container {
+                width: 90%;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-image">
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#souvenirs">Сувениры</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#perfumes">Духи на разлив</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacts">Контакты</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Секция Сувениры -->
+    <section id="souvenirs" class="section">
+        <div id="souvenirsCarousel" class="carousel slide souvenirs-slider" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#souvenirsCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#souvenirsCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#souvenirsCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/static/souvenir1.jpg" class="d-block w-100" alt="Сувенир 1">
+                    <div class="slide-content">
+                        <h2>Магниты на холодильник</h2>
+                        <p>Красивые магниты с видами города</p>
+                        <div class="price">от 150 ₽</div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/souvenir2.jpg" class="d-block w-100" alt="Сувенир 2">
+                    <div class="slide-content">
+                        <h2>Кружки с символикой</h2>
+                        <p>Керамические кружки с логотипом города</p>
+                        <div class="price">от 350 ₽</div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/souvenir3.jpg" class="d-block w-100" alt="Сувенир 3">
+                    <div class="slide-content">
+                        <h2>Брелоки</h2>
+                        <p>Стильные брелоки с достопримечательностями</p>
+                        <div class="price">от 200 ₽</div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#souvenirsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#souvenirsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Секция Духи на разлив -->
+    <section id="perfumes" class="section">
+        <div id="perfumesCarousel" class="carousel slide perfumes-slider" data-bs-ride="carousel" data-bs-interval="6000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#perfumesCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#perfumesCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#perfumesCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/static/perfume1.jpg" class="d-block w-100" alt="Духи 1">
+                    <div class="perfume-content">
+                        <h2>Цветочные композиции</h2>
+                        <ul>
+                            <li>Нежный аромат розы и жасмина</li>
+                            <li>Стойкость до 6 часов</li>
+                            <li>Объем: от 10 мл</li>
+                        </ul>
+                        <a href="#" class="btn-more">Подробнее</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/perfume2.jpg" class="d-block w-100" alt="Духи 2">
+                    <div class="perfume-content">
+                        <h2>Восточные ароматы</h2>
+                        <ul>
+                            <li>Теплые ноты ванили и амбры</li>
+                            <li>Стойкость до 8 часов</li>
+                            <li>Объем: от 10 мл</li>
+                        </ul>
+                        <a href="#" class="btn-more">Подробнее</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/perfume3.jpg" class="d-block w-100" alt="Духи 3">
+                    <div class="perfume-content">
+                        <h2>Свежие цитрусовые</h2>
+                        <ul>
+                            <li>Бодрящий микс лимона и бергамота</li>
+                            <li>Стойкость до 4 часов</li>
+                            <li>Объем: от 10 мл</li>
+                        </ul>
+                        <a href="#" class="btn-more">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#perfumesCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#perfumesCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Секция Контакты -->
+    <section id="contacts" class="section contacts-section">
+        <div class="container">
+            <h1>Контакты</h1>
+            <div class="contact-info">
+                <p><strong>Телефон:</strong> +7 (999) 285-45-95</p>
+                <p><strong>WhatsApp:</strong> <a href="https://wa.me/79992854595" target="_blank" style="color: #2980b9;">Написать в WhatsApp</a></p>
+                <p><strong>Адрес:</strong> Свердловская область, г. Первоуральск, проспект Ильича, дом 31, 1 этаж</p>
+                <p class="building-name">ТЦ "Строитель"</p>
+                <p><strong>Время работы:</strong> Пн-Вс: 10:00 – 20:00</p>
+                <p><strong>Местоположение на карте:</strong></p>
+            </div>
+            <div class="map-container">
+                <iframe src="https://yandex.ru/map-widget/v1/?ll=59.963889%2C56.908889&z=16&mode=search&whatshere%5Bpoint%5D=59.963889%2C56.908889&whatshere%5Bzoom%5D=17&text=%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%20%D0%98%D0%BB%D1%8C%D0%B8%D1%87%D0%B0%2C%2031%2C%20%D0%9F%D0%B5%D1%80%D0%B2%D0%BE%D1%83%D1%80%D0%B0%D0%BB%D1%8C%D1%81%D0%BA%2C%20%D0%A1%D0%B2%D0%B5%D1%80%D0%B4%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Плавающая кнопка WhatsApp -->
+    <a href="https://wa.me/79992854595" class="position-fixed bottom-0 end-0 m-3 btn btn-success rounded-circle p-3" style="width: 60px; height: 60px;" target="_blank">
+        <i class="fab fa-whatsapp fs-4"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Пауза при наведении на слайдер духов
+        document.getElementById('perfumesCarousel').addEventListener('mouseenter', function() {
+            this.setAttribute('data-bs-ride', 'false');
+        });
+
+        document.getElementById('perfumesCarousel').addEventListener('mouseleave', function() {
+            this.setAttribute('data-bs-ride', 'carousel');
+        });
+
+        // Плавная прокрутка к секциям
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
